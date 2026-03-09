@@ -23,7 +23,39 @@ class SanksiResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Pelanggaran & Sanksi';
 
+    protected static ?int $navigationSort = 11;
+
     protected static ?string $recordTitleAttribute = 'nama_sanksi';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
+
+    public static function canViewAny(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah', 'siswa']);
+    }
+
+    public static function canCreate(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
+
+    public static function canEdit($record): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
+
+    public static function canDelete($record): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
 
     public static function form(Schema $schema): Schema
     {

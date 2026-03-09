@@ -21,9 +21,47 @@ class BimbinganKonselingResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHeart;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Layanan';
+    protected static string|UnitEnum|null $navigationGroup = 'Bimbingan Konseling';
+
+    protected static ?int $navigationSort = 30;
 
     protected static ?string $recordTitleAttribute = 'keterangan';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'bk', 'kesiswaan']);
+    }
+
+    public static function canViewAny(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'bk', 'kesiswaan', 'kepalasekolah']);
+    }
+
+    public static function canCreate(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'bk', 'kesiswaan', 'siswa']);
+    }
+
+    public static function canEdit($record): bool
+    {
+        $user = auth()->user();
+        if ($user->level === 'admin' || $user->level === 'kesiswaan') {
+            return true;
+        }
+        if ($user->level === 'bk' && $record->guru_konselor === $user->guru_id) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
 
     public static function form(Schema $schema): Schema
     {

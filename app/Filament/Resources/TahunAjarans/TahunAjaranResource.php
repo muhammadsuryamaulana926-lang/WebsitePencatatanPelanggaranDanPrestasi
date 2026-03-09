@@ -21,9 +21,40 @@ class TahunAjaranResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Pengaturan';
+    protected static string|UnitEnum|null $navigationGroup = 'Sistem';
+
+    protected static ?int $navigationSort = 52;
 
     protected static ?string $recordTitleAttribute = 'tahun_ajaran';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->level === 'admin';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return true;
+    }
+
+    public static function canCreate(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->level === 'admin';
+    }
+
+    public static function canEdit($record): bool
+    {
+        $user = auth()->user();
+        return $user && $user->level === 'admin';
+    }
+
+    public static function canDelete($record): bool
+    {
+        $user = auth()->user();
+        return $user && $user->level === 'admin';
+    }
 
     public static function form(Schema $schema): Schema
     {

@@ -21,9 +21,41 @@ class GuruResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Data Master';
+    protected static string|UnitEnum|null $navigationGroup = 'Master Data';
+
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $recordTitleAttribute = 'nama_guru';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->level === 'admin';
+    }
+
+    public static function canViewAny(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah']);
+    }
+
+    public static function canCreate(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->level === 'admin';
+    }
+
+    public static function canEdit($record): bool
+    {
+        $user = auth()->user();
+        return $user && $user->level === 'admin';
+    }
+
+    public static function canDelete($record): bool
+    {
+        $user = auth()->user();
+        return $user && $user->level === 'admin';
+    }
 
     public static function form(Schema $schema): Schema
     {

@@ -21,9 +21,47 @@ class VerifikasiDataResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCheckBadge;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Layanan';
+    protected static string|UnitEnum|null $navigationGroup = 'Monitoring & Verifikasi';
+
+    protected static ?int $navigationSort = 40;
 
     protected static ?string $recordTitleAttribute = 'status';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
+
+    public static function canViewAny(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas']);
+    }
+
+    public static function canCreate(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
+
+    public static function canEdit($record): bool
+    {
+        $user = auth()->user();
+        if ($user->level === 'admin' || $user->level === 'kesiswaan') {
+            return true;
+        }
+        if ($user->can_verify && $record->guru_verifikator === $user->guru_id) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
 
     public static function form(Schema $schema): Schema
     {

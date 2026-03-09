@@ -1,1 +1,0 @@
-<div style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);"></div><?php /**PATH D:\Projek-pkl\WebsideKesiswaanSurya\WebsideKesiswaanSurya\storage\framework\views/711b8a1ceb266c13318845710b80b12c.blade.php ENDPATH**/ ?>

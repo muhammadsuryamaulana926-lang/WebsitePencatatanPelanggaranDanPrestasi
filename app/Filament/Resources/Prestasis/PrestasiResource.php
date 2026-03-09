@@ -21,9 +21,41 @@ class PrestasiResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrophy;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Layanan';
+    protected static string|UnitEnum|null $navigationGroup = 'Prestasi';
+
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $recordTitleAttribute = 'keterangan';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
+
+    public static function canViewAny(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah']);
+    }
+
+    public static function canCreate(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
+
+    public static function canEdit($record): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
+
+    public static function canDelete($record): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
 
     public static function form(Schema $schema): Schema
     {

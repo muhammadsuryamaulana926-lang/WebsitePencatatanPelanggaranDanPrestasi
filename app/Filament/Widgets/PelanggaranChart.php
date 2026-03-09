@@ -14,6 +14,12 @@ class PelanggaranChart extends ChartWidget
 
     protected int | string | array $columnSpan = 1;
 
+    public static function canView(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah']);
+    }
+
     protected function getData(): array
     {
         $months = [];

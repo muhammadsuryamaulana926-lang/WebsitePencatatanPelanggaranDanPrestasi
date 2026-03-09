@@ -23,7 +23,45 @@ class PelaksanaanSanksiResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Pelanggaran & Sanksi';
 
+    protected static ?int $navigationSort = 12;
+
     protected static ?string $recordTitleAttribute = 'keterangan';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'siswa']);
+    }
+
+    public static function canViewAny(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'siswa', 'kepalasekolah']);
+    }
+
+    public static function canCreate(): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'siswa']);
+    }
+
+    public static function canEdit($record): bool
+    {
+        $user = auth()->user();
+        if ($user->level === 'admin' || $user->level === 'kesiswaan') {
+            return true;
+        }
+        if ($user->level === 'siswa' && $record->siswa_id === $user->siswa->id) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        $user = auth()->user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+    }
 
     public static function form(Schema $schema): Schema
     {

@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Filament\Pages\BK;
+
+use Filament\Pages\Page;
+
+class ViewDataSendiri extends Page
+{
+    protected string $view = 'filament.pages.b-k.view-data-sendiri';
+    protected static ?string $navigationLabel = 'View Data Sendiri';
+    protected static ?string $title = 'View Data Sendiri';
+    protected static ?int $navigationSort = 2;
+
+    public static function getNavigationIcon(): string
+    {
+        return 'heroicon-o-eye';
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->level === 'bk';
+    }
+}
