@@ -7,6 +7,7 @@ use App\Models\Guru;
 use App\Models\Pelanggaran;
 use App\Models\Prestasi;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+use Illuminate\Support\Facades\Auth;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatsOverview extends BaseWidget
@@ -15,12 +16,12 @@ class StatsOverview extends BaseWidget
     
     public static function canView(): bool
     {
-        return auth()->check();
+        return Auth::check();
     }
     
     protected function getStats(): array
     {
-        $user = auth()->user();
+        $user = Auth::user();
         
         if (!$user) {
             return [];
@@ -35,11 +36,15 @@ class StatsOverview extends BaseWidget
                     ->description('Siswa terdaftar')
                     ->descriptionIcon('heroicon-m-users')
                     ->color('primary'),
-                Stat::make('Pelanggaran', Pelanggaran::count())
-                    ->description('Total insiden tercatat')
-                    ->descriptionIcon('heroicon-m-exclamation-triangle')
+                Stat::make('Pelanggaran Bulan Ini', Pelanggaran::whereMonth('created_at', now()->month)->count())
+                    ->description('Insiden bulan ini')
+                    ->descriptionIcon('heroicon-m-exclamation-circle')
                     ->color('danger'),
-                Stat::make('Prestasi', Prestasi::count())
+                Stat::make('Sanksi Aktif', \App\Models\Sanksi::whereIn('status', ['belum_dilaksanakan', 'direncanakan', 'berjalan'])->count())
+                    ->description('Sanksi sedang diproses')
+                    ->descriptionIcon('heroicon-m-gavel')
+                    ->color('warning'),
+                Stat::make('Total Prestasi', Prestasi::count())
                     ->description('Pencapaian siswa')
                     ->descriptionIcon('heroicon-m-trophy')
                     ->color('success'),

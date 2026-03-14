@@ -15,23 +15,36 @@ class VerifikasiDataTable
         return $table
             ->columns([
                 TextColumn::make('tabel_terkait')
+                    ->label('Kategori')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'pelanggaran' => 'danger',
+                        'prestasi' => 'success',
+                        default => 'gray',
+                    })
                     ->searchable(),
-                TextColumn::make('id_terkait')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('guru_verifikator')
-                    ->numeric()
+                TextColumn::make('siswa_nama')
+                    ->label('Siswa')
+                    ->state(fn ($record) => $record->siswa?->nama_siswa ?? '-')
+                    ->searchable(),
+                TextColumn::make('jenis_data')
+                    ->label('Detail Data')
+                    ->state(fn ($record) => $record->jenis_data),
+                TextColumn::make('guru.nama_guru')
+                    ->label('Verifikator')
                     ->sortable(),
                 TextColumn::make('status')
-                    ->badge(),
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'menunggu' => 'warning',
+                        'disetujui' => 'success',
+                        'ditolak' => 'danger',
+                        default => 'gray',
+                    }),
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Tanggal')
+                    ->dateTime('d/m/Y')
+                    ->sortable(),
             ])
             ->filters([
                 //

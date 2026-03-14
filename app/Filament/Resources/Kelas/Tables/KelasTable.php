@@ -15,20 +15,18 @@ class KelasTable
         return $table
             ->columns([
                 TextColumn::make('nama_kelas')
+                    ->label('Nama Kelas')
                     ->searchable(),
                 TextColumn::make('jurusan')
+                    ->label('Jurusan')
                     ->searchable(),
-                TextColumn::make('wali_kelas_id')
-                    ->numeric()
+                TextColumn::make('waliKelas.nama_guru')
+                    ->label('Wali Kelas')
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Dibuat')
+                    ->dateTime('d/m/Y')
+                    ->sortable(),
             ])
             ->filters([
                 //

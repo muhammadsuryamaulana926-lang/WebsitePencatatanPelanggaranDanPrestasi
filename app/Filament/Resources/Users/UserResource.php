@@ -5,39 +5,38 @@ namespace App\Filament\Resources\Users;
 use App\Models\User;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Schemas\Components\TextInput;
-use Filament\Schemas\Components\Select;
-use Filament\Schemas\Components\Toggle;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Illuminate\Support\Facades\Auth;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use BackedEnum;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
-    protected static ?int $navigationSort = 53;
+    protected static ?int $navigationSort = 33;
     protected static ?string $navigationLabel = 'Manajemen User';
 
-    public static function getNavigationIcon(): string
-    {
-        return 'heroicon-o-users';
-    }
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Sistem';
+        return 'Konfigurasi Sistem';
     }
 
     public static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()?->level === 'admin';
+        return Auth::user()?->level === 'admin';
     }
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->level === 'admin';
+        return Auth::user()?->level === 'admin';
     }
 
     public static function form(Schema $schema): Schema

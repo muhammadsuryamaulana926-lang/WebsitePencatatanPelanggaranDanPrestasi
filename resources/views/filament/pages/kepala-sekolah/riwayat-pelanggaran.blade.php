@@ -1,5 +1,5 @@
 <x-filament-panels::page>
     <div class="space-y-4">
-        <p>Halaman ini sedang dalam pengembangan.</p>
+        {{ $this->table }}
     </div>
 </x-filament-panels::page>

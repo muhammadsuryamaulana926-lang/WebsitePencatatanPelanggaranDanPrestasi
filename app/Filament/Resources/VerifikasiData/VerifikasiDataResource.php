@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\VerifikasiData;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\VerifikasiData\Pages\CreateVerifikasiData;
 use App\Filament\Resources\VerifikasiData\Pages\EditVerifikasiData;
 use App\Filament\Resources\VerifikasiData\Pages\ListVerifikasiData;
@@ -23,31 +25,31 @@ class VerifikasiDataResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Monitoring & Verifikasi';
 
-    protected static ?int $navigationSort = 40;
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $recordTitleAttribute = 'status';
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canViewAny(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         if ($user->level === 'admin' || $user->level === 'kesiswaan') {
             return true;
         }
@@ -59,7 +61,7 @@ class VerifikasiDataResource extends Resource
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 

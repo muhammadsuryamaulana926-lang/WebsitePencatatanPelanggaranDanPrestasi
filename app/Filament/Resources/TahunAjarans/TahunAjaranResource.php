@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\TahunAjarans;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\TahunAjarans\Pages\CreateTahunAjaran;
 use App\Filament\Resources\TahunAjarans\Pages\EditTahunAjaran;
 use App\Filament\Resources\TahunAjarans\Pages\ListTahunAjarans;
@@ -21,15 +23,15 @@ class TahunAjaranResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Sistem';
+    protected static string|UnitEnum|null $navigationGroup = 'Konfigurasi Sistem';
 
-    protected static ?int $navigationSort = 52;
+    protected static ?int $navigationSort = 32;
 
     protected static ?string $recordTitleAttribute = 'tahun_ajaran';
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 
@@ -40,19 +42,19 @@ class TahunAjaranResource extends Resource
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 

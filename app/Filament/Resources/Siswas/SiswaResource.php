@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Siswas;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\Siswas\Pages\CreateSiswa;
 use App\Filament\Resources\Siswas\Pages\EditSiswa;
 use App\Filament\Resources\Siswas\Pages\ListSiswas;
@@ -29,31 +31,31 @@ class SiswaResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas', 'kepalasekolah']);
     }
 
     public static function canViewAny(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan', 'walikelas', 'kepalasekolah']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas', 'kepalasekolah']);
     }
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas', 'kepalasekolah']);
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas', 'kepalasekolah']);
     }
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 

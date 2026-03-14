@@ -7,13 +7,14 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\DatePicker;
 use App\Models\BimbinganKonseling;
 use App\Models\Siswa;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class InputBK extends Page implements HasTable
 {
@@ -31,7 +32,7 @@ class InputBK extends Page implements HasTable
 
     public static function canAccess(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'bk';
     }
 
@@ -40,7 +41,7 @@ class InputBK extends Page implements HasTable
         return $table
             ->query(
                 BimbinganKonseling::query()
-                    ->where('guru_konselor', auth()->user()->guru_id)
+                    ->where('guru_konselor', Auth::user()->guru_id)
                     ->with(['siswa.kelas'])
             )
             ->columns([
@@ -92,7 +93,7 @@ class InputBK extends Page implements HasTable
                     ->action(function (array $data) {
                         BimbinganKonseling::create([
                             'siswa_id' => $data['siswa_id'],
-                            'guru_konselor' => auth()->user()->guru_id,
+                            'guru_konselor' => Auth::user()->guru_id,
                             'topik' => $data['topik'],
                             'tindakan_solusi' => $data['tindakan_solusi'] ?? null,
                             'tanggal_konseling' => $data['tanggal_konseling'],

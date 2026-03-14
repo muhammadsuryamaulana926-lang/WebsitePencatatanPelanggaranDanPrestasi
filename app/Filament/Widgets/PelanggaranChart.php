@@ -2,6 +2,8 @@
 
 namespace App\Filament\Widgets;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\Pelanggaran;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
@@ -16,21 +18,28 @@ class PelanggaranChart extends ChartWidget
 
     public static function canView(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah', 'guru', 'walikelas']);
     }
 
     protected function getData(): array
     {
+        $user = Auth::user();
         $months = [];
         $counts = [];
 
         for ($i = 11; $i >= 0; $i--) {
             $date = Carbon::now()->subMonths($i);
             $months[] = $date->translatedFormat('M Y');
-            $counts[] = Pelanggaran::whereYear('created_at', $date->year)
-                ->whereMonth('created_at', $date->month)
-                ->count();
+            
+            $query = Pelanggaran::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month);
+            
+            if (in_array($user->level, ['guru', 'walikelas'])) {
+                $query->where('guru_pencatat', $user->guru_id);
+            }
+
+            $counts[] = $query->count();
         }
 
         return [

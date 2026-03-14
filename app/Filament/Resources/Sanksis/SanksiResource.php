@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Sanksis;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\Sanksis\Pages\CreateSanksi;
 use App\Filament\Resources\Sanksis\Pages\EditSanksi;
 use App\Filament\Resources\Sanksis\Pages\ListSanksis;
@@ -21,7 +23,7 @@ class SanksiResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedScale;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Pelanggaran & Sanksi';
+    protected static string|UnitEnum|null $navigationGroup = 'Layanan Kesiswaan';
 
     protected static ?int $navigationSort = 11;
 
@@ -29,31 +31,31 @@ class SanksiResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canViewAny(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah', 'siswa']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Pelanggarans;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\Pelanggarans\Pages\CreatePelanggaran;
 use App\Filament\Resources\Pelanggarans\Pages\EditPelanggaran;
 use App\Filament\Resources\Pelanggarans\Pages\ListPelanggarans;
@@ -21,7 +23,7 @@ class PelanggaranResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedExclamationTriangle;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Pelanggaran & Sanksi';
+    protected static string|UnitEnum|null $navigationGroup = 'Layanan Kesiswaan';
 
     protected static ?int $navigationSort = 10;
 
@@ -29,25 +31,25 @@ class PelanggaranResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas']);
     }
 
     public static function canViewAny(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas', 'kepalasekolah']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas']);
     }
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas']);
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         if ($user->level === 'admin' || $user->level === 'kesiswaan') {
             return true;
         }
@@ -59,8 +61,8 @@ class PelanggaranResource extends Resource
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas']);
     }
 
     public static function form(Schema $schema): Schema

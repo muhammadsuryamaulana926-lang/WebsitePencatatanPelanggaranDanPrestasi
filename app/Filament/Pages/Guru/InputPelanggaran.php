@@ -7,7 +7,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -15,6 +15,7 @@ use App\Models\Pelanggaran;
 use App\Models\Siswa;
 use App\Models\JenisPelanggaran;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class InputPelanggaran extends Page implements HasTable
 {
@@ -32,7 +33,7 @@ class InputPelanggaran extends Page implements HasTable
 
     public static function canAccess(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['guru', 'walikelas']);
     }
 
@@ -41,7 +42,7 @@ class InputPelanggaran extends Page implements HasTable
         return $table
             ->query(
                 Pelanggaran::query()
-                    ->where('guru_pencatat', auth()->user()->guru_id)
+                    ->where('guru_pencatat', Auth::user()->guru_id)
                     ->with(['siswa.kelas', 'jenisPelanggaran'])
             )
             ->columns([
@@ -89,7 +90,7 @@ class InputPelanggaran extends Page implements HasTable
                             'siswa_id' => $data['siswa_id'],
                             'jenis_pelanggaran_id' => $data['jenis_pelanggaran_id'],
                             'poin' => $data['poin'],
-                            'guru_pencatat' => auth()->user()->guru_id,
+                            'guru_pencatat' => Auth::user()->guru_id,
                             'tahun_ajaran_id' => $tahunAjaran?->id,
                             'keterangan' => $data['keterangan'] ?? null,
                         ]);
@@ -98,7 +99,7 @@ class InputPelanggaran extends Page implements HasTable
                         \App\Models\VerifikasiData::create([
                             'tabel_terkait' => 'pelanggaran',
                             'id_terkait' => $pelanggaran->id,
-                            'guru_verifikator' => auth()->user()->guru_id,
+                            'guru_verifikator' => Auth::user()->guru_id,
                             'status' => 'menunggu'
                         ]);
 

@@ -14,22 +14,30 @@ class MonitoringPelanggaransTable
     {
         return $table
             ->columns([
-                TextColumn::make('pelanggaran_id')
-                    ->numeric()
+                TextColumn::make('pelanggaran.siswa.nama_siswa')
+                    ->label('Siswa')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('guru_kepsek')
-                    ->numeric()
+                TextColumn::make('pelanggaran.jenisPelanggaran.nama_pelanggaran')
+                    ->label('Pelanggaran')
+                    ->sortable(),
+                TextColumn::make('guruKepsek.nama_guru')
+                    ->label('Guru/Kepsek Pemantau')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('status')
-                    ->badge(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'dipantau' => 'warning',
+                        'dalam_tindakan' => 'info',
+                        'selesai' => 'success',
+                        default => 'gray',
+                    }),
                 TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Update Terakhir')
+                    ->dateTime('d/m/Y H:i')
+                    ->sortable(),
             ])
             ->filters([
                 //

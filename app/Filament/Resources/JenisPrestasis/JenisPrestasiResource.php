@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\JenisPrestasis;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\JenisPrestasis\Pages\CreateJenisPrestasi;
 use App\Filament\Resources\JenisPrestasis\Pages\EditJenisPrestasi;
 use App\Filament\Resources\JenisPrestasis\Pages\ListJenisPrestasis;
@@ -21,15 +23,15 @@ class JenisPrestasiResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedStar;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Sistem';
+    protected static string|UnitEnum|null $navigationGroup = 'Konfigurasi Sistem';
 
-    protected static ?int $navigationSort = 51;
+    protected static ?int $navigationSort = 31;
 
     protected static ?string $recordTitleAttribute = 'nama_prestasi';
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
@@ -40,19 +42,19 @@ class JenisPrestasiResource extends Resource
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 

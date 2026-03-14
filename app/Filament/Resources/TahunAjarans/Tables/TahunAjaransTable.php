@@ -16,10 +16,13 @@ class TahunAjaransTable
         return $table
             ->columns([
                 TextColumn::make('tahun_ajaran')
+                    ->label('Tahun Ajaran')
                     ->searchable(),
                 TextColumn::make('semester')
+                    ->label('Semester')
                     ->badge(),
                 IconColumn::make('status_aktif')
+                    ->label('Aktif')
                     ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\BimbinganKonselings;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\BimbinganKonselings\Pages\CreateBimbinganKonseling;
 use App\Filament\Resources\BimbinganKonselings\Pages\EditBimbinganKonseling;
 use App\Filament\Resources\BimbinganKonselings\Pages\ListBimbinganKonselings;
@@ -21,33 +23,33 @@ class BimbinganKonselingResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHeart;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Bimbingan Konseling';
+    protected static string|UnitEnum|null $navigationGroup = 'Layanan Kesiswaan';
 
-    protected static ?int $navigationSort = 30;
+    protected static ?int $navigationSort = 14;
 
     protected static ?string $recordTitleAttribute = 'keterangan';
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'bk', 'kesiswaan']);
     }
 
     public static function canViewAny(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'bk', 'kesiswaan', 'kepalasekolah']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'bk', 'kesiswaan']);
     }
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'bk', 'kesiswaan', 'siswa']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'bk', 'kesiswaan']);
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         if ($user->level === 'admin' || $user->level === 'kesiswaan') {
             return true;
         }
@@ -59,8 +61,8 @@ class BimbinganKonselingResource extends Resource
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'bk', 'kesiswaan']);
     }
 
     public static function form(Schema $schema): Schema

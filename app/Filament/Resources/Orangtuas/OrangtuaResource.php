@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Orangtuas;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\Orangtuas\Pages\CreateOrangtua;
 use App\Filament\Resources\Orangtuas\Pages\EditOrangtua;
 use App\Filament\Resources\Orangtuas\Pages\ListOrangtuas;
@@ -29,31 +31,31 @@ class OrangtuaResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 
     public static function canViewAny(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 

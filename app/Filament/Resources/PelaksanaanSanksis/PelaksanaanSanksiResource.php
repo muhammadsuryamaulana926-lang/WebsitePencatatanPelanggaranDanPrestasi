@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\PelaksanaanSanksis;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\PelaksanaanSanksis\Pages\CreatePelaksanaanSanksi;
 use App\Filament\Resources\PelaksanaanSanksis\Pages\EditPelaksanaanSanksi;
 use App\Filament\Resources\PelaksanaanSanksis\Pages\ListPelaksanaanSanksis;
@@ -21,33 +23,33 @@ class PelaksanaanSanksiResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentCheck;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Pelanggaran & Sanksi';
+    protected static string|UnitEnum|null $navigationGroup = 'Layanan Kesiswaan';
 
-    protected static ?int $navigationSort = 12;
+    protected static ?int $navigationSort = 13;
 
     protected static ?string $recordTitleAttribute = 'keterangan';
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan', 'siswa']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canViewAny(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan', 'siswa', 'kepalasekolah']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan', 'siswa']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         if ($user->level === 'admin' || $user->level === 'kesiswaan') {
             return true;
         }
@@ -59,7 +61,7 @@ class PelaksanaanSanksiResource extends Resource
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 

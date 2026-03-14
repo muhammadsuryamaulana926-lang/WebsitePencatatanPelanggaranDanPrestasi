@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Pages\Kesiswaan;
+namespace App\Filament\Pages\WaliKelas;
 
 use App\Models\Siswa;
 use App\Models\Pelanggaran;
@@ -9,35 +9,37 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Filament\Support\Icons\Heroicon;
 use BackedEnum;
 use UnitEnum;
-use Illuminate\Support\Facades\Auth;
 
-class MonitoringAll extends Page implements HasTable
+class DataKelas extends Page implements HasTable
 {
     use InteractsWithTable;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPresentationChartLine;
-    protected static ?string $navigationLabel = 'Monitoring All';
-    protected static ?string $title = 'Monitoring Keseluruhan Siswa';
-    protected static string|UnitEnum|null $navigationGroup = 'Monitoring & Verifikasi';
-    protected static ?int $navigationSort = 22;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;
+    protected static ?string $navigationLabel = 'Data Kelas Wali';
+    protected static ?string $title = 'Data Kelas Wali';
+    protected static string|UnitEnum|null $navigationGroup = 'Layanan Kesiswaan';
+    protected static ?int $navigationSort = 1;
 
-    protected string $view = 'filament.pages.kesiswaan.monitoring-all';
+    protected string $view = 'filament.pages.wali-kelas.data-kelas';
 
     public static function canAccess(): bool
     {
         $user = Auth::user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah']);
+        return $user && $user->level === 'walikelas';
     }
 
     public function table(Table $table): Table
     {
+        $guruId = Auth::user()->guru_id;
+        
         return $table
             ->query(
                 Siswa::query()
+                    ->whereHas('kelas', fn($q) => $q->where('wali_kelas', $guruId))
                     ->with(['kelas', 'pelanggaran'])
                     ->withSum('pelanggaran as total_poin', 'poin')
             )
@@ -46,11 +48,8 @@ class MonitoringAll extends Page implements HasTable
                     ->label('Nama Siswa')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('kelas.nama_kelas')
-                    ->label('Kelas')
-                    ->sortable(),
                 TextColumn::make('total_poin')
-                    ->label('Total Poin')
+                    ->label('Total Poin Pelanggaran')
                     ->numeric()
                     ->sortable()
                     ->badge()
@@ -59,7 +58,7 @@ class MonitoringAll extends Page implements HasTable
                         $state >= 41 => 'warning',
                         default => 'info',
                     }),
-                TextColumn::make('status_monitoring')
+                TextColumn::make('status')
                     ->label('Status')
                     ->state(fn (Siswa $record): string => match (true) {
                         $record->total_poin >= 90 => 'Kritis',

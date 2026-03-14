@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Prestasis;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\Prestasis\Pages\CreatePrestasi;
 use App\Filament\Resources\Prestasis\Pages\EditPrestasi;
 use App\Filament\Resources\Prestasis\Pages\ListPrestasis;
@@ -21,40 +23,40 @@ class PrestasiResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrophy;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Prestasi';
+    protected static string|UnitEnum|null $navigationGroup = 'Layanan Kesiswaan';
 
-    protected static ?int $navigationSort = 20;
+    protected static ?int $navigationSort = 12;
 
     protected static ?string $recordTitleAttribute = 'keterangan';
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas']);
     }
 
     public static function canViewAny(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas']);
     }
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas']);
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas']);
     }
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'guru', 'walikelas']);
     }
 
     public static function form(Schema $schema): Schema

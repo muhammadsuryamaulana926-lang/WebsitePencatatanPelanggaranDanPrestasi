@@ -14,32 +14,37 @@ class PelanggaransTable
     {
         return $table
             ->columns([
-                TextColumn::make('siswa_id')
-                    ->numeric()
+                TextColumn::make('siswa.nama_siswa')
+                    ->label('Siswa')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('guru_pencatat')
-                    ->numeric()
+                TextColumn::make('guruPencatat.nama_guru')
+                    ->label('Guru Pencatat')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('jenis_pelanggaran_id')
-                    ->numeric()
+                TextColumn::make('jenisPelanggaran.nama_pelanggaran')
+                    ->label('Jenis Pelanggaran')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('tahun_ajaran_id')
-                    ->numeric()
+                TextColumn::make('tahunAjaran.tahun_ajaran')
+                    ->label('Tahun Ajaran')
                     ->sortable(),
                 TextColumn::make('poin')
+                    ->label('Poin')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Tanggal Input')
+                    ->dateTime('d/m/Y H:i')
+                    ->sortable(),
             ])
             ->filters([
                 //
+            ])
+            ->headerActions([
+                \App\Filament\Actions\ExportPdfAction::make('reports.pelanggaran', [
+                    'records' => \App\Models\Pelanggaran::with(['siswa.kelas', 'jenisPelanggaran', 'guruPencatat'])->get()
+                ])->label('Export PDF (Semua)'),
             ])
             ->recordActions([
                 EditAction::make(),

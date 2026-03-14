@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages\Kesiswaan;
 
+use Illuminate\Support\Facades\Auth;
+
 use Filament\Pages\Page;
 
 class InputPelanggaran extends Page
@@ -18,7 +20,7 @@ class InputPelanggaran extends Page
 
     public static function canAccess(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'kesiswaan';
     }
 }

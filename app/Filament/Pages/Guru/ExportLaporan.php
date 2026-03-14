@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages\Guru;
 
+use Illuminate\Support\Facades\Auth;
+
 use Filament\Pages\Page;
 
 class ExportLaporan extends Page
@@ -18,7 +20,7 @@ class ExportLaporan extends Page
 
     public static function canAccess(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'guru';
     }
 }

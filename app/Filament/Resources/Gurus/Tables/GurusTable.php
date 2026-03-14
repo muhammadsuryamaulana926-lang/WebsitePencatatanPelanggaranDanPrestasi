@@ -15,21 +15,26 @@ class GurusTable
         return $table
             ->columns([
                 TextColumn::make('nip')
+                    ->label('NIP')
                     ->searchable(),
                 TextColumn::make('nama_guru')
+                    ->label('Nama Guru')
                     ->searchable(),
                 TextColumn::make('bidang_studi')
+                    ->label('Bidang Studi')
                     ->searchable(),
                 TextColumn::make('status')
-                    ->badge(),
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'aktif' => 'success',
+                        'nonaktif' => 'danger',
+                        default => 'gray',
+                    }),
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Tgl Bergabung')
+                    ->dateTime('d/m/Y')
+                    ->sortable(),
             ])
             ->filters([
                 //

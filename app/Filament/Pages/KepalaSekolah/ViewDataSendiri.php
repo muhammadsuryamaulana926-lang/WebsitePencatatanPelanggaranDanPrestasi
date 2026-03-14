@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages\KepalaSekolah;
 
+use Illuminate\Support\Facades\Auth;
+
 use Filament\Pages\Page;
 
 class ViewDataSendiri extends Page
@@ -18,7 +20,7 @@ class ViewDataSendiri extends Page
 
     public static function canAccess(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'kepalasekolah';
     }
 }

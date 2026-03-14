@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Gurus;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\Gurus\Pages\CreateGuru;
 use App\Filament\Resources\Gurus\Pages\EditGuru;
 use App\Filament\Resources\Gurus\Pages\ListGurus;
@@ -29,31 +31,31 @@ class GuruResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 
     public static function canViewAny(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah']);
     }
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 

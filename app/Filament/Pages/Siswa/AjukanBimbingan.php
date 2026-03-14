@@ -7,10 +7,11 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Textarea;
 use App\Models\BimbinganKonseling;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class AjukanBimbingan extends Page implements HasTable
 {
@@ -28,13 +29,13 @@ class AjukanBimbingan extends Page implements HasTable
 
     public static function canAccess(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'siswa' && $user->siswa;
     }
 
     public function table(Table $table): Table
     {
-        $siswaId = auth()->user()->siswa?->id;
+        $siswaId = Auth::user()->siswa?->id;
 
         return $table
             ->query(
@@ -78,7 +79,7 @@ class AjukanBimbingan extends Page implements HasTable
                     ])
                     ->action(function (array $data) {
                         BimbinganKonseling::create([
-                            'siswa_id' => auth()->user()->siswa->id,
+                            'siswa_id' => Auth::user()->siswa->id,
                             'topik' => $data['topik'],
                             'status' => 'terjadwal',
                             'status_pengajuan' => 'diajukan',

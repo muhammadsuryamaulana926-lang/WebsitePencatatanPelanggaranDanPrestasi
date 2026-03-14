@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages\Siswa;
 
+use Illuminate\Support\Facades\Auth;
+
 use Filament\Pages\Page;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -26,13 +28,13 @@ class ViewDataSendiri extends Page implements HasTable
 
     public static function canAccess(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'siswa' && $user->siswa;
     }
 
     public function table(Table $table): Table
     {
-        $siswaId = auth()->user()->siswa?->id;
+        $siswaId = Auth::user()->siswa?->id;
 
         return $table
             ->query(
@@ -54,7 +56,7 @@ class ViewDataSendiri extends Page implements HasTable
 
     public function getPrestasiTable(): Table
     {
-        $siswaId = auth()->user()->siswa?->id;
+        $siswaId = Auth::user()->siswa?->id;
 
         return Table::make()
             ->query(

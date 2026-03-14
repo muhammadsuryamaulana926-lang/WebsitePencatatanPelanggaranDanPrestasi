@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\MonitoringPelanggarans;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\MonitoringPelanggarans\Pages\CreateMonitoringPelanggaran;
 use App\Filament\Resources\MonitoringPelanggarans\Pages\EditMonitoringPelanggaran;
 use App\Filament\Resources\MonitoringPelanggarans\Pages\ListMonitoringPelanggarans;
@@ -21,40 +23,40 @@ class MonitoringPelanggaranResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEye;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Pelanggaran & Sanksi';
+    protected static string|UnitEnum|null $navigationGroup = 'Monitoring & Verifikasi';
 
-    protected static ?int $navigationSort = 13;
+    protected static ?int $navigationSort = 21;
 
     protected static ?string $recordTitleAttribute = 'keterangan';
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah']);
     }
 
     public static function canViewAny(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah']);
     }
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah']);
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah']);
     }
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
-        return $user && in_array($user->level, ['admin', 'kesiswaan']);
+        $user = Auth::user();
+        return $user && in_array($user->level, ['admin', 'kesiswaan', 'kepalasekolah']);
     }
 
     public static function form(Schema $schema): Schema

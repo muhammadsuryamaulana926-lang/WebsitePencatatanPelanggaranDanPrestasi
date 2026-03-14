@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Kelas;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Filament\Resources\Kelas\Pages\CreateKelas;
 use App\Filament\Resources\Kelas\Pages\EditKelas;
 use App\Filament\Resources\Kelas\Pages\ListKelas;
@@ -29,7 +31,7 @@ class KelasResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 
@@ -40,19 +42,19 @@ class KelasResource extends Resource
 
     public static function canCreate(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 
     public static function canEdit($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 
     public static function canDelete($record): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && $user->level === 'admin';
     }
 

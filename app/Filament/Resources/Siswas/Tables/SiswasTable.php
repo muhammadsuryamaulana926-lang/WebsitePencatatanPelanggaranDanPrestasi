@@ -15,22 +15,21 @@ class SiswasTable
         return $table
             ->columns([
                 TextColumn::make('nis')
+                    ->label('NIS')
                     ->searchable(),
                 TextColumn::make('nama_siswa')
+                    ->label('Nama Siswa')
                     ->searchable(),
-                TextColumn::make('kelas_id')
-                    ->numeric()
+                TextColumn::make('kelas.nama_kelas')
+                    ->label('Kelas')
                     ->sortable(),
                 TextColumn::make('jenis_kelamin')
+                    ->label('L/P')
                     ->badge(),
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Terdaftar')
+                    ->dateTime('d/m/Y')
+                    ->sortable(),
             ])
             ->filters([
                 //

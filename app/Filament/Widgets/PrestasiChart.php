@@ -2,6 +2,8 @@
 
 namespace App\Filament\Widgets;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\Prestasi;
 use App\Models\JenisPrestasi;
 use Filament\Widgets\ChartWidget;
@@ -16,7 +18,7 @@ class PrestasiChart extends ChartWidget
 
     public static function canView(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return $user && in_array($user->level, ['admin', 'kesiswaan']);
     }
 
